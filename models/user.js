@@ -141,7 +141,7 @@ async function updateUser(id, profile) {
   return updatedProfile;
 }
 
-async function deleteUser(id) {
+async function removeUser(id) {
   const updatedUser = await daoUsers.findByIdAndUpdate(
     id,
     { status: "deleted" },
@@ -152,20 +152,20 @@ async function deleteUser(id) {
   return updatedUser;
 }
 
-async function removeUser(id) {
+async function deleteUser(id) {
     const user = await daoUsers.findById(id);
     if (!user) {
         throw new Error("User not found.");
     }
     if (user.status !== "deleted") {
-        throw new Error("User must be marked as deleted before it can be removed.");
+        throw new Error("User status must be marked as deleted before it can be hard deleted.");
     }
     const result = await daoUsers.findByIdAndDelete(id);
     if (!result) {
-        throw new Error("Failed to remove user.");
+        throw new Error("Failed to delete user.");
     }
     return {
         success: true,
-        message: "User successfully removed.",
+        message: "User successfully deleted from database.",
     };
 }

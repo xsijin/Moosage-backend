@@ -23,10 +23,10 @@ router.post("/create", usersController.createUser);
 // Update a user profile
 router.patch("/update/:id", usersController.updateUser);
 
-// Delete a user profile (status change only)
-router.delete("/delete/:id", usersController.deleteUser);
+// Remove a user profile (status change to deleted but still in db)
+router.patch("/remove/:id", usersController.removeUser);
 
-// Remove a user profile from database (final delete - admin only)
-router.delete("/remove/:id", usersController.removeUser);
+// Delete a user profile from database (delete from db - admin only)
+router.delete("/delete/:id", usersController.deleteUser);
 
 module.exports = router;

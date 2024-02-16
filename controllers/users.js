@@ -93,20 +93,20 @@ async function updateUser(req, res) {
   }
 }
 
-async function deleteUser(req, res) {
+async function removeUser(req, res) {
   try {
-    await modelUsers.deleteUser(req.params.id);
-    res.status(200).json({ message: "User status set to deleted. Use removeUser to remove from database." });
+    await modelUsers.removeUser(req.params.id);
+    res.status(200).json({ message: "User status set to deleted. Use deleteUser to hard delete from database." });
   } catch (err) {
     console.log(err);
     res.status(500).json({ errorMsg: err.message });
   }
 }
 
-async function removeUser(req, res) {
+async function deleteUser(req, res) {
     try {
-      await modelUsers.removeUser(req.params.id);
-      res.status(200).json({ message: "User removed from database." });
+      await modelUsers.deleteUser(req.params.id);
+      res.status(200).json({ message: "User deleted from database." });
     } catch (err) {
       console.log(err);
       res.status(500).json({ errorMsg: err.message });
