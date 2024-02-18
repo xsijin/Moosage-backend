@@ -1,18 +1,21 @@
 const daoUsers = require("../daos/users");
+const daoBoards = require("../daos/boards");
+const daoMoosages = require("../daos/moosages");
 // const utilSecurity = require("../util/security");
 
 module.exports = {
   getAllUsers,
   getUser,
+  createUser,
+  updateUser,
+  removeUser,
+  deleteUser,
   getLoginDetails,
   loginUser,
   logoutUser,
-  createUser,
-  updateUser,
-  deleteUser,
-  removeUser,
 };
 
+// only admins will be able to see all users
 function getAllUsers(queryFields) {
   return daoUsers.find(queryFields);
 }
@@ -25,13 +28,20 @@ async function getUser(id) {
       throw new Error("User not found");
     }
 
+    // Get only active boards and moosages
+    const activeBoards = await daoBoards.find({ user: id, status: "active" });
+    const activeMoosages = await daoMoosages.find({
+      user: id,
+      status: "active",
+    });
+
     return {
       _id: user._id,
       nickName: user.nickName,
       preferredName: user.preferredName,
       email: user.email,
-      boards: user.boards,
-      moosages: user.moosages,
+      boards: activeBoards,
+      moosages: activeMoosages,
       profilePicUrl: user.profilePicUrl,
       is_admin: user.is_admin,
       status: user.status,
@@ -41,6 +51,89 @@ async function getUser(id) {
     console.log(err);
     throw new Error(err.message || "An error occurred");
   }
+}
+
+async function createUser(body) {
+  // Check if user already exists in DB by email
+  const userByEmail = await daoUsers.findOne({ email: body.email });
+  if (userByEmail) {
+    return {
+      success: false,
+      error: "Email already exists. Please use a different email.",
+    };
+  }
+
+  // Check if user already exists in DB by nickname
+  const userByNickname = await daoUsers.findOne({ nickName: body.nickName });
+  if (userByNickname) {
+    return {
+      success: false,
+      error: "Nickname already exists. Please use a different nickname.",
+    };
+  }
+
+  // If new user, create user profile
+  const newUser = await daoUsers.create(body);
+
+  // Create a new public board for the new user
+  const newBoard = await daoBoards.create({
+    userId: newUser._id,
+    title: "Public",
+    is_public: true,
+    status: "active",
+  });
+
+  newUser.boards.push(newBoard._id);
+  await newUser.save();
+
+  return { success: true, data: newUser };
+}
+
+async function updateUser(id, profile) {
+  const updatedProfile = await daoUsers.findByIdAndUpdate(id, profile, {
+    new: true,
+    runValidators: true,
+  });
+  return updatedProfile;
+}
+
+async function removeUser(id) {
+  // Set user status to "deleted"
+  const updatedUser = await daoUsers.findByIdAndUpdate(
+    id,
+    { status: "deleted" },
+    {
+      new: true,
+    }
+  );
+
+  // Set status of all boards created by the user to "deleted"
+  await daoBoards.updateMany({ userId: id }, { status: "deleted" });
+
+  // Set status of all moosages created by the user to "deleted"
+  await daoMoosages.updateMany({ userId: id }, { status: "deleted" });
+
+  return updatedUser;
+}
+
+async function deleteUser(id) {
+  const user = await daoUsers.findById(id);
+  if (!user) {
+    throw new Error("User not found.");
+  }
+  if (user.status !== "deleted") {
+    throw new Error(
+      "User status must be marked as deleted before it can be hard deleted."
+    );
+  }
+  const result = await daoUsers.findByIdAndDelete(id);
+  if (!result) {
+    throw new Error("Failed to delete user.");
+  }
+  return {
+    success: true,
+    message: "User successfully deleted from database.",
+  };
 }
 
 async function getLoginDetails(queryFields) {
@@ -107,65 +200,4 @@ async function logoutUser(body) {
     { token: null, expire_at: null }
   );
   return { success: true, data: res };
-}
-
-async function createUser(body) {
-  // Check if user already exists in DB by email
-  const userByEmail = await daoUsers.findOne({ email: body.email });
-  if (userByEmail) {
-    return {
-      success: false,
-      error: "Email already exists. Please use a different email.",
-    };
-  }
-
-  // Check if user already exists in DB by nickname
-  const userByNickname = await daoUsers.findOne({ nickName: body.nickName });
-  if (userByNickname) {
-    return {
-      success: false,
-      error: "Nickname already exists. Please use a different nickname.",
-    };
-  }
-
-  // If new user, create user profile
-  const newUser = await daoUsers.create(body);
-  return { success: true, data: newUser };
-}
-
-async function updateUser(id, profile) {
-  const updatedProfile = await daoUsers.findByIdAndUpdate(id, profile, {
-    new: true,
-    runValidators: true,
-  });
-  return updatedProfile;
-}
-
-async function removeUser(id) {
-  const updatedUser = await daoUsers.findByIdAndUpdate(
-    id,
-    { status: "deleted" },
-    {
-      new: true,
-    }
-  );
-  return updatedUser;
-}
-
-async function deleteUser(id) {
-    const user = await daoUsers.findById(id);
-    if (!user) {
-        throw new Error("User not found.");
-    }
-    if (user.status !== "deleted") {
-        throw new Error("User status must be marked as deleted before it can be hard deleted.");
-    }
-    const result = await daoUsers.findByIdAndDelete(id);
-    if (!result) {
-        throw new Error("Failed to delete user.");
-    }
-    return {
-        success: true,
-        message: "User successfully deleted from database.",
-    };
 }

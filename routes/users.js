@@ -1,9 +1,9 @@
 var express = require("express");
 var usersController = require("../controllers/users");
-// var securityMiddleware = require("../middlewares/security");
 var router = express.Router();
+// var securityMiddleware = require("../middlewares/security");
 
-// base path: /users
+/* base path: /users */
 
 // Show all user profiles
 router.get("/show", usersController.getAllUsers);
