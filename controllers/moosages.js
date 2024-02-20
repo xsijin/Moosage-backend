@@ -26,7 +26,7 @@ async function getAllMoosages(req, res) {
 
 async function getActiveMoosages(req, res) {
   try {
-    const moosages = await modelMossages.getActiveMoosages();
+    const moosages = await modelMoosages.getActiveMoosages();
 
     res.status(200).json({ moosages: moosages });
   } catch (error) {
@@ -83,7 +83,7 @@ async function getBoardMoosages(req, res) {
 
 async function createMoosage(req, res) {
   try {
-    const userId = req.body.user;
+    const userId = req.body.userId;
 
     if (!userId) {
       return res.status(404).json({ errorMsg: "User not found." });
@@ -104,7 +104,7 @@ async function createMoosage(req, res) {
 async function updateMoosage(req, res) {
   try {
     const updatedMoosage = await modelMoosages.updateMoosage(
-      req.params.moosageId,
+      req.params.id,
       req.body
     );
     res.status(200).json(updatedMoosage);

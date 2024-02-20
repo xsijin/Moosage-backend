@@ -17,12 +17,21 @@ module.exports = {
 
 // only admins will be able to see all boards
 async function getAllBoards() {
-    const allBoards = await daoBoards.find({});
+  const allBoards = await daoBoards.find({}).populate({
+    path: "userId",
+    select: "nickName preferredName -_id",
+  });
 
-    if (!allBoards || allBoards.length === 0) {
-        return "No boards available.";
-    }
-    return allBoards;
+  if (!allBoards || allBoards.length === 0) {
+    return "No boards available.";
+  }
+
+  return allBoards.map((board) => ({
+    ...board._doc,
+    userId: board.userId._id,
+    nickName: board.userId.nickName,
+    preferredName: board.userId.preferredName,
+  }));
 }
 
 // only admins will be able to see all active or soft-deleted boards
@@ -63,8 +72,8 @@ async function getBoard(id) {
 
 // Get all active boards created by a user (include private boards)
 async function getUserBoards(userId) {
-    const boards = await daoBoards.find({ user: userId, status: "active" });
-    return boards;
+  const boards = await daoBoards.find({ user: userId, status: "active" });
+  return boards;
 }
 
 // Get all public & active boards created by a user
@@ -121,16 +130,20 @@ async function removeBoard(id) {
   // Set status of all moosages in the board to "deleted"
   await daoMoosages.updateMany({ boardId: id }, { status: "deleted" });
 
-// Remove board ID from user's boards array
-await daoUsers.findByIdAndUpdate(updatedBoard.userId, { $pull: { boards: id } });
+  // Remove board ID from user's boards array
+  await daoUsers.findByIdAndUpdate(updatedBoard.userId, {
+    $pull: { boards: id },
+  });
 
-// Get all moosages in the board
-const moosages = await daoMoosages.find({ boardId: id });
+  // Get all moosages in the board
+  const moosages = await daoMoosages.find({ boardId: id });
 
-// Remove moosages IDs from user's moosages array
-for (let moosage of moosages) {
-  await daoUsers.findByIdAndUpdate(moosage.user, { $pull: { moosages: moosage._id } });
-}
+  // Remove moosages IDs from user's moosages array
+  for (let moosage of moosages) {
+    await daoUsers.findByIdAndUpdate(moosage.user, {
+      $pull: { moosages: moosage._id },
+    });
+  }
 
   return updatedBoard;
 }

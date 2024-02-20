@@ -29,19 +29,20 @@ async function getUser(id) {
     }
 
     // Get only active boards and moosages
-    const activeBoards = await daoBoards.find({ user: id, status: "active" });
-    const activeMoosages = await daoMoosages.find({
-      user: id,
-      status: "active",
-    });
+    const publicBoards = await daoBoards.find({ userId: id, status: "active", is_public: true });
+    const privateBoards = await daoBoards.find({ userId: id, status: "active", is_public: false });
+    const publicMoosages = await daoMoosages.find({ userId: id, status: "active", is_public: true });
+    const privateMoosages = await daoMoosages.find({ userId: id, status: "active", is_public: false });
 
     return {
       _id: user._id,
       nickName: user.nickName,
       preferredName: user.preferredName,
       email: user.email,
-      boards: activeBoards,
-      moosages: activeMoosages,
+      publicBoards: publicBoards,
+      privateBoards: privateBoards,
+      publicMoosages: publicMoosages,
+      privateMoosages: privateMoosages,
       profilePicUrl: user.profilePicUrl,
       is_admin: user.is_admin,
       status: user.status,
