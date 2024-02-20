@@ -6,10 +6,10 @@ var router = express.Router();
 /* base path: /users */
 
 // Show all user profiles
-router.get("/show", usersController.getAllUsers);
+router.get("/admin/show", usersController.getAllUsers);
 
 // Show particular user profile
-router.get("/showOne/:id", usersController.getUser);
+router.get("/show/:id", usersController.getUser);
 
 // User Login
 router.get("/login", usersController.getLoginDetails);

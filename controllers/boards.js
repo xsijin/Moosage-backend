@@ -14,13 +14,14 @@ module.exports = {
 };
 
 async function getAllBoards(req, res) {
-  try {
-    const boards = await modelBoards.getAllBoards(req.query);
-    res.json({ boards: boards });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ errorMsg: error.message });
-  }
+    try {
+        const boards = await modelBoards.getAllBoards();
+
+        res.status(200).json(boards);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ errorMsg: error.message });
+    }
 }
 
 async function getActiveBoards(req, res) {
@@ -77,7 +78,8 @@ async function getUserPublicBoards(req, res) {
 
 async function createBoard(req, res) {
   try {
-    const board = await modelBoards.createBoard(req.body);
+    const { userId, ...boardData } = req.body;
+    const board = await modelBoards.createBoard(userId, boardData);
     res.status(201).json(board);
   } catch (error) {
     console.log(error);

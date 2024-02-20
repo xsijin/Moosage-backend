@@ -6,7 +6,7 @@ var router = express.Router();
 /* base path: /boards */
 
 // Show all boards
-router.get("/show", boardsController.getAllBoards);
+router.get("/admin/show", boardsController.getAllBoards);
 
 // Show all active boards (admin use only)
 router.get("/showActive", boardsController.getActiveBoards);
@@ -15,7 +15,7 @@ router.get("/showActive", boardsController.getActiveBoards);
 router.get("/showDeleted", boardsController.getDeletedBoards);
 
 // Show particular board
-router.get("/showOne/:id", boardsController.getBoard);
+router.get("/show/:id", boardsController.getBoard);
 
 // Show all boards created by a user
 router.get("/user/:userId", boardsController.getUserBoards);

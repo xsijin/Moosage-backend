@@ -1,5 +1,6 @@
 const daoBoards = require("../daos/boards");
 const daoMoosages = require("../daos/moosages");
+const daoUsers = require("../daos/users");
 
 module.exports = {
   getAllBoards,
@@ -15,11 +16,16 @@ module.exports = {
 };
 
 // only admins will be able to see all boards
-function getAllBoards(queryFields) {
-  return daoBoards.find(queryFields);
+async function getAllBoards() {
+    const allBoards = await daoBoards.find({});
+
+    if (!allBoards || allBoards.length === 0) {
+        return "No boards available.";
+    }
+    return allBoards;
 }
 
-// only admins will be able to see all active or deleted boards
+// only admins will be able to see all active or soft-deleted boards
 function getActiveBoards() {
   return daoBoards.find({ status: "active" });
 }
@@ -57,18 +63,8 @@ async function getBoard(id) {
 
 // Get all active boards created by a user (include private boards)
 async function getUserBoards(userId) {
-  const boards = await daoBoards.find({ user: userId, status: "active" });
-
-  return boards.map((board) => {
-    return {
-      _id: board._id,
-      userId: board.userId,
-      title: board.title,
-      moosages: board.moosages,
-      status: board.status,
-      is_public: board.is_public,
-    };
-  });
+    const boards = await daoBoards.find({ user: userId, status: "active" });
+    return boards;
 }
 
 // Get all public & active boards created by a user
@@ -79,16 +75,7 @@ async function getUserPublicBoards(userId) {
     is_public: true,
   });
 
-  return boards.map((board) => {
-    return {
-      _id: board._id,
-      userId: board.userId,
-      title: board.title,
-      moosages: board.moosages,
-      status: board.status,
-      is_public: board.is_public,
-    };
-  });
+  return boards;
 }
 
 async function createBoard(userId, boardData) {
@@ -127,8 +114,23 @@ async function removeBoard(id) {
     }
   );
 
+  if (!updatedBoard) {
+    return "Board does not exist.";
+  }
+
   // Set status of all moosages in the board to "deleted"
   await daoMoosages.updateMany({ boardId: id }, { status: "deleted" });
+
+// Remove board ID from user's boards array
+await daoUsers.findByIdAndUpdate(updatedBoard.userId, { $pull: { boards: id } });
+
+// Get all moosages in the board
+const moosages = await daoMoosages.find({ boardId: id });
+
+// Remove moosages IDs from user's moosages array
+for (let moosage of moosages) {
+  await daoUsers.findByIdAndUpdate(moosage.user, { $pull: { moosages: moosage._id } });
+}
 
   return updatedBoard;
 }
