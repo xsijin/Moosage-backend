@@ -67,7 +67,12 @@ async function getBoardMoosages(boardId) {
     boardId: boardId,
     status: "active",
     is_public: true,
-  });
+  })
+  .populate({
+    path: 'userId',
+    select: 'preferredName nickName'
+  })
+  .sort({ createdAt: -1 });
 
   if (!BoardMoosages || BoardMoosages.length === 0) {
     return (message = "Board has no moosages available.");
