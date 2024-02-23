@@ -114,10 +114,13 @@ async function updateBoard(id, board) {
 }
 
 async function removeBoard(id) {
-  // Set board status to "deleted"
+  // Set board status to "deleted" and remove moosages IDs from board's moosages array
   const updatedBoard = await daoBoards.findByIdAndUpdate(
     id,
-    { status: "deleted" },
+    { 
+      $set: { status: "deleted" },
+      $pull: { moosages: { $in: moosages.map(moosage => moosage._id) } }
+    },
     {
       new: true,
     }
