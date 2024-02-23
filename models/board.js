@@ -72,7 +72,7 @@ async function getBoard(id) {
 
 // Get all active boards created by a user (include private boards)
 async function getUserBoards(userId) {
-  const boards = await daoBoards.find({ user: userId, status: "active" });
+  const boards = await daoBoards.find({ userId: userId, status: "active" });
   return boards;
 }
 
