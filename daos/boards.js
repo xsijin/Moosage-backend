@@ -15,6 +15,10 @@ const boardSchema = new Schema(
       default: "New Board",
     },
 
+    description: {
+      type: String,
+    },
+
     moosages: [
       {
         type: Schema.Types.ObjectId,

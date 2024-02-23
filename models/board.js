@@ -60,6 +60,7 @@ async function getBoard(id) {
       userPreferredName: board.userId.preferredName, // return the user's preferred name
       userNickName: board.userId.nickName, // return the user's nickname
       title: board.title,
+      description: board.description,
       moosages: board.moosages,
       status: board.status,
       is_public: board.is_public,
@@ -97,6 +98,7 @@ async function createBoard(userId, boardData) {
   const newBoard = await daoBoards.create({
     userId: userId,
     title: boardData.title,
+    description: boardData.description,
     is_public: boardData.is_public,
   });
 
