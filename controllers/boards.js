@@ -78,7 +78,8 @@ async function getUserPublicBoards(req, res) {
 
 async function createBoard(req, res) {
   try {
-    const { userId, ...boardData } = req.body;
+    const userId = req.params.userId;
+    const boardData = req.body;
     const board = await modelBoards.createBoard(userId, boardData);
     res.status(201).json(board);
   } catch (error) {

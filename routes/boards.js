@@ -24,7 +24,7 @@ router.get("/user/:userId", boardsController.getUserBoards);
 router.get("/public/:userId", boardsController.getUserPublicBoards);
 
 // Create a board
-router.post("/create", boardsController.createBoard);
+router.post("/create/:userId", boardsController.createBoard);
 
 // Update a board
 router.patch("/update/:id", boardsController.updateBoard);
