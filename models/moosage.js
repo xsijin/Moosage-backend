@@ -72,6 +72,10 @@ async function getBoardMoosages(boardId) {
     path: 'userId',
     select: 'preferredName nickName'
   })
+  .populate({
+    path: 'boardId',
+    select: 'title'
+  })
   .sort({ createdAt: -1 });
 
   if (!BoardMoosages || BoardMoosages.length === 0) {
