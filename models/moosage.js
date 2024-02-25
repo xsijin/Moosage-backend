@@ -92,6 +92,11 @@ async function getBoardMoosages(boardId) {
 
 // Get all public & active moosages for a public board by boardId
 async function getPublicBoardMoosages(boardId) {
+  const board = await daoBoards.findById(boardId);
+  if (!board || board.status !== "active") {
+    return null; // board not found or is not active
+  }
+  
   const BoardMoosages = await daoMoosages
     .find({
       boardId: boardId,
