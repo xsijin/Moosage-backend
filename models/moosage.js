@@ -64,6 +64,11 @@ async function getUserPublicMoosages(userId) {
 
 // Get all active moosages for a board by boardId (include private moosages)
 async function getBoardMoosages(boardId) {
+  const board = await daoBoards.findById(boardId);
+  if (!board || board.status !== "active") {
+    return null; // board not found or is not active
+  }
+
   const BoardMoosages = await daoMoosages
     .find({
       boardId: boardId,
@@ -80,7 +85,7 @@ async function getBoardMoosages(boardId) {
     .sort({ createdAt: -1 });
 
   if (!BoardMoosages || BoardMoosages.length === 0) {
-    return (message = null); // "Board has no moosages available."
+    return (message = "Board has no moosages available.");
   }
   return BoardMoosages;
 }
@@ -104,7 +109,7 @@ async function getPublicBoardMoosages(boardId) {
     .sort({ createdAt: -1 });
 
   if (!BoardMoosages || BoardMoosages.length === 0) {
-    return (message = null); // "Board has no moosages available."
+    return (message = "Board has no moosages available.");
   }
   return BoardMoosages;
 }
