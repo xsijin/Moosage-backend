@@ -14,8 +14,11 @@ router.get("/showActive", moosagesController.getActiveMoosages);
 // Show all deleted moosages (admin use only)
 router.get("/showDeleted", moosagesController.getDeletedMoosages);
 
-// Show all moosages on particular board
+// Show all moosages on owner's board (include private)
 router.get("/show/:boardId", moosagesController.getBoardMoosages);
+
+// Show all moosages on a public share board (public only)
+router.get("/public/:boardId", moosagesController.getPublicBoardMoosages);
 
 // Show all moosages created by a user
 router.get("/user/:userId", moosagesController.getUserMoosages);

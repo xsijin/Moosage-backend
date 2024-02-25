@@ -7,6 +7,7 @@ module.exports = {
   getActiveMoosages,
   getDeletedMoosages,
   getBoardMoosages,
+  getPublicBoardMoosages,
   getUserMoosages,
   getUserPublicMoosages,
   createMoosage,
@@ -61,25 +62,49 @@ async function getUserPublicMoosages(userId) {
   return UserMoosages;
 }
 
-// Get all public & active moosages for a board by boardId
+// Get all active moosages for a board by boardId (include private moosages)
 async function getBoardMoosages(boardId) {
-  const BoardMoosages = await daoMoosages.find({
-    boardId: boardId,
-    status: "active",
-    is_public: true,
-  })
-  .populate({
-    path: 'userId',
-    select: 'preferredName nickName'
-  })
-  .populate({
-    path: 'boardId',
-    select: 'title'
-  })
-  .sort({ createdAt: -1 });
+  const BoardMoosages = await daoMoosages
+    .find({
+      boardId: boardId,
+      status: "active",
+    })
+    .populate({
+      path: "userId",
+      select: "preferredName nickName",
+    })
+    .populate({
+      path: "boardId",
+      select: "title",
+    })
+    .sort({ createdAt: -1 });
 
   if (!BoardMoosages || BoardMoosages.length === 0) {
-    return (message = "Board has no moosages available.");
+    return (message = null); // "Board has no moosages available."
+  }
+  return BoardMoosages;
+}
+
+// Get all public & active moosages for a public board by boardId
+async function getPublicBoardMoosages(boardId) {
+  const BoardMoosages = await daoMoosages
+    .find({
+      boardId: boardId,
+      status: "active",
+      is_public: true,
+    })
+    .populate({
+      path: "userId",
+      select: "preferredName nickName",
+    })
+    .populate({
+      path: "boardId",
+      select: "title",
+    })
+    .sort({ createdAt: -1 });
+
+  if (!BoardMoosages || BoardMoosages.length === 0) {
+    return (message = null); // "Board has no moosages available."
   }
   return BoardMoosages;
 }
@@ -88,8 +113,8 @@ async function createMoosage(userId, boardId, moosageData) {
   const board = await daoBoards.findById(boardId);
   const user = await daoUsers.findById(userId);
 
-  if (!board || !user) { 
-    return (message = "Board or user does not exist."); 
+  if (!board || !user) {
+    return (message = "Board or user does not exist.");
   }
 
   const moosage = await daoMoosages.create({
@@ -159,22 +184,21 @@ async function removeMoosage(id) {
 }
 
 async function deleteMoosage(id) {
-    const moosage = await daoMoosages.findById(id);
-    if (!moosage) {
-      throw new Error("Moosage not found.");
-    }
-    if (moosage.status !== "deleted") {
-      throw new Error(
-        "Moosage status must be marked as deleted before it can be hard deleted."
-      );
-    }
-    const result = await daoMoosages.findByIdAndDelete(id);
-    if (!result) {
-      throw new Error("Failed to delete moosage.");
-    }
-    return {
-      success: true,
-      message:
-        "Moosage successfully deleted from database.",
-    };
+  const moosage = await daoMoosages.findById(id);
+  if (!moosage) {
+    throw new Error("Moosage not found.");
   }
+  if (moosage.status !== "deleted") {
+    throw new Error(
+      "Moosage status must be marked as deleted before it can be hard deleted."
+    );
+  }
+  const result = await daoMoosages.findByIdAndDelete(id);
+  if (!result) {
+    throw new Error("Failed to delete moosage.");
+  }
+  return {
+    success: true,
+    message: "Moosage successfully deleted from database.",
+  };
+}

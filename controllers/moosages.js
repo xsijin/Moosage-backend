@@ -5,6 +5,7 @@ module.exports = {
   getActiveMoosages,
   getDeletedMoosages,
   getBoardMoosages,
+  getPublicBoardMoosages,
   getUserMoosages,
   getUserPublicMoosages,
   createMoosage,
@@ -73,6 +74,18 @@ async function getBoardMoosages(req, res) {
   try {
     const boardId = req.params.boardId;
     const moosages = await modelMoosages.getBoardMoosages(boardId);
+
+    res.status(200).json(moosages);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ errorMsg: error.message });
+  }
+}
+
+async function getPublicBoardMoosages(req, res) {
+  try {
+    const boardId = req.params.boardId;
+    const moosages = await modelMoosages.getPublicBoardMoosages(boardId);
 
     res.status(200).json(moosages);
   } catch (error) {
