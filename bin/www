@@ -5,7 +5,7 @@
  */
 
 var app = require('../server');
-var debug = require('debug')('visitar-backend:server');
+var debug = require('debug')('moosage-backend:server');
 var http = require('http');
 
 /**

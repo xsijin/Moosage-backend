@@ -1,7 +1,7 @@
 var express = require("express");
 var usersController = require("../controllers/users");
 var router = express.Router();
-// var securityMiddleware = require("../middlewares/security");
+var securityMiddleware = require("../middlewares/security");
 
 /* base path: /users */
 

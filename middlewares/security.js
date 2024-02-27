@@ -22,7 +22,7 @@ function checkJWT(req, res, next) {
 // check if they are logged in
 function checkLogin(req, res, next) {
     // Status code of 401 is Unauthorized
-    if (!req.body.user) return res.status(401).json("Unauthorized User");
+    if (!req.user) return res.status(401).json("Unauthorized User");
     // A okay
     next();
 };
