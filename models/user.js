@@ -1,7 +1,7 @@
 const daoUsers = require("../daos/users");
 const daoBoards = require("../daos/boards");
 const daoMoosages = require("../daos/moosages");
-// const utilSecurity = require("../util/security");
+const utilSecurity = require("../util/security");
 
 module.exports = {
   getAllUsers,
