@@ -74,9 +74,9 @@ async function getBoard(id) {
 async function getUserBoards(userId) {
   const boards = await daoBoards.find({ userId: userId, status: "active" });
 
-  for (let board of boards) {
-    board.moosages = await daoMoosages.find({ _id: { $in: board.moosages }, is_public: true }, { _id: 1 });
-  }
+  // for (let board of boards) {
+  //   board.moosages = await daoMoosages.find({ _id: { $in: board.moosages }, is_public: true }, { _id: 1 });
+  // }
 
   return boards;
 }
