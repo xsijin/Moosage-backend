@@ -80,7 +80,7 @@ async function getBoardMoosages(boardId) {
     })
     .populate({
       path: "boardId",
-      select: "title",
+      select: "title userId",
     })
     .sort({ createdAt: -1 });
 
