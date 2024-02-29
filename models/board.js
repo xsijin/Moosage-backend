@@ -48,7 +48,10 @@ async function getBoard(id) {
   try {
     const board = await daoBoards
       .findOne({ _id: id, status: "active" })
-      .populate("userId");
+      .populate({
+        path: "userId",
+        select: "preferredName nickName",
+      });
 
     if (!board) {
       throw new Error("Board not found");
