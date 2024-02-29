@@ -149,7 +149,7 @@ async function getLoginDetails(queryFields) {
   // url decode email '@' -> %40
   const userEmail = decodeURIComponent(queryFields.email);
   const loginFieldsRes = await daoUsers.findOne(
-    { email: userEmail },
+    { email: userEmail, status: "active" },
     loginFields
   );
   return { success: true, data: loginFieldsRes };
