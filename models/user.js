@@ -178,6 +178,7 @@ async function loginUser(body) {
     userId: user._id,
     email: user.email,
     is_admin: user.is_admin,
+    profilePicUrl: user.profilePicUrl,
   };
 
   console.log("jwtPayload:", jwtPayload);
