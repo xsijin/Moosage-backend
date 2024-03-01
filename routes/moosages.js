@@ -6,7 +6,7 @@ var router = express.Router();
 /* base path: /moosages */
 
 // Show one moosage (for debugging purposes)
-router.get("/show/:id", moosagesController.getOneMoosage);
+router.get("/show/single/:id", moosagesController.getOneMoosage);
 
 // Show all moosages
 router.get("/admin/show", moosagesController.getAllMoosages);
@@ -21,13 +21,13 @@ router.get("/showDeleted", moosagesController.getDeletedMoosages);
 router.get("/show/:boardId", moosagesController.getBoardMoosages);
 
 // Show all moosages on a public share board (public only)
-router.get("/public/:boardId", moosagesController.getPublicBoardMoosages);
+router.get("/public/board/:boardId", moosagesController.getPublicBoardMoosages);
 
 // Show all moosages created by a user
 router.get("/user/:userId", moosagesController.getUserMoosages);
 
 // Show all public moosages created by a user
-router.get("/public/:userId", moosagesController.getUserPublicMoosages);
+router.get("/public/user/:userId", moosagesController.getUserPublicMoosages);
 
 // Create a moosage for a board
 router.post("/create/:boardId", moosagesController.createMoosage);
