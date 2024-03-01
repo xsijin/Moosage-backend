@@ -17,8 +17,8 @@ router.get("/showActive", securityMiddleware.checkPermission, moosagesController
 // Show all deleted moosages (admin use only)
 router.get("/showDeleted", securityMiddleware.checkPermission, moosagesController.getDeletedMoosages);
 
-// Show all moosages on owner's board (include private)
-router.get("/show/:boardId", securityMiddleware.checkLogin, moosagesController.getBoardMoosages);
+// Show all moosages board (include private)
+router.get("/show/:boardId", moosagesController.getBoardMoosages);
 
 // Show all moosages on a public share board (public only)
 router.get("/public/board/:boardId", moosagesController.getPublicBoardMoosages);
