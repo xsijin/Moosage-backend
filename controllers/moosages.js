@@ -1,6 +1,7 @@
 const modelMoosages = require("../models/moosage");
 
 module.exports = {
+  getOneMoosage,
   getAllMoosages,
   getActiveMoosages,
   getDeletedMoosages,
@@ -13,6 +14,15 @@ module.exports = {
   removeMoosage,
   deleteMoosage,
 };
+async function getOneMoosage(req, res) {
+  try {
+    const moosage = await modelMoosages.getOneMoosage(req.params.id);
+    res.json({ moosage: moosage });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ errorMsg: error.message });
+  }
+}
 
 async function getAllMoosages(req, res) {
   try {

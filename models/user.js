@@ -114,6 +114,15 @@ async function removeUser(id) {
   // Set status of all moosages created by the user to "deleted"
   await daoMoosages.updateMany({ userId: id }, { status: "deleted" });
 
+  // Get all moosages created by the user
+  const userMoosages = await daoMoosages.find({ userId: id });
+
+  // Remove deleted moosages from all boards' moosages array
+  await daoBoards.updateMany(
+    {},
+    { $pull: { moosages: { $in: userMoosages.map(moosage => moosage._id) } } }
+  );
+
   return updatedUser;
 }
 

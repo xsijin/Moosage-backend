@@ -3,6 +3,7 @@ const daoMoosages = require("../daos/moosages");
 const daoUsers = require("../daos/users");
 
 module.exports = {
+  getOneMoosage,
   getAllMoosages,
   getActiveMoosages,
   getDeletedMoosages,
@@ -15,6 +16,36 @@ module.exports = {
   removeMoosage,
   deleteMoosage,
 };
+
+// only get particular moosage (all statuses for debugging purposes)
+async function getOneMoosage(id) {
+  try {
+    const moosage = await daoMoosages
+      .findOne({ _id: id })
+      .populate({
+        path: "userId",
+        select: "preferredName nickName",
+      });
+
+    if (!moosage) {
+      throw new Error("Moosage not found");
+    }
+
+    return {
+      _id: moosage._id,
+      userId: moosage.userId._id, // return the user's id
+      userPreferredName: moosage.userId.preferredName, // return the user's preferred name
+      userNickName: moosage.userId.nickName, // return the user's nickname
+      message: moosage.message,
+      moodUrl: moosage.moodUrl,
+      status: moosage.status,
+      is_public: moosage.is_public,
+    };
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message || "An error occurred");
+  }
+}
 
 // only admins will be able to see all moosages
 async function getAllMoosages() {

@@ -5,6 +5,9 @@ var router = express.Router();
 
 /* base path: /moosages */
 
+// Show one moosage (for debugging purposes)
+router.get("/show/:id", moosagesController.getOneMoosage);
+
 // Show all moosages
 router.get("/admin/show", moosagesController.getAllMoosages);
 
