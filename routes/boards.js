@@ -18,7 +18,7 @@ router.get("/showDeleted", securityMiddleware.checkPermission, boardsController.
 router.get("/show/:id", securityMiddleware.checkPermission, boardsController.getBoard);
 
 // Show all boards created by a user
-router.get("/user/:userId", securityMiddleware.checkPermission, boardsController.getUserBoards);
+router.get("/user/:userId", securityMiddleware.checkLogin, boardsController.getUserBoards);
 
 // Show all public boards created by a user
 router.get("/public/:userId", boardsController.getUserPublicBoards);
