@@ -18,13 +18,13 @@ router.get("/showActive", securityMiddleware.checkPermission, moosagesController
 router.get("/showDeleted", securityMiddleware.checkPermission, moosagesController.getDeletedMoosages);
 
 // Show all moosages on owner's board (include private)
-router.get("/show/:boardId", securityMiddleware.checkPermission, moosagesController.getBoardMoosages);
+router.get("/show/:boardId", securityMiddleware.checkLogin, moosagesController.getBoardMoosages);
 
 // Show all moosages on a public share board (public only)
 router.get("/public/board/:boardId", moosagesController.getPublicBoardMoosages);
 
 // Show all moosages created by a user
-router.get("/user/:userId", securityMiddleware.checkPermission, moosagesController.getUserMoosages);
+router.get("/user/:userId", securityMiddleware.checkLogin, moosagesController.getUserMoosages);
 
 // Show all public moosages created by a user
 router.get("/public/user/:userId", moosagesController.getUserPublicMoosages);
