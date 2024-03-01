@@ -21,10 +21,10 @@ router.post("/logout", securityMiddleware.checkLogin, usersController.logoutUser
 router.post("/create", usersController.createUser);
 
 // Update a user profile
-router.patch("/update/:id", securityMiddleware.checkPermission, usersController.updateUser);
+router.patch("/update/:id", securityMiddleware.checkLogin, usersController.updateUser);
 
 // Remove a user profile (status change to deleted but still in db)
-router.patch("/remove/:id", securityMiddleware.checkPermission, usersController.removeUser);
+router.patch("/remove/:id", securityMiddleware.checkLogin, usersController.removeUser);
 
 // Delete a user profile from database (delete from db - admin only)
 router.delete("/delete/:id", securityMiddleware.checkPermission, usersController.deleteUser);

@@ -33,10 +33,10 @@ router.get("/public/user/:userId", moosagesController.getUserPublicMoosages);
 router.post("/create/:boardId", securityMiddleware.checkLogin, moosagesController.createMoosage);
 
 // Update a moosage
-router.patch("/update/:id", securityMiddleware.checkPermission, moosagesController.updateMoosage);
+router.patch("/update/:id", securityMiddleware.checkLogin, moosagesController.updateMoosage);
 
 // Remove a moosage (status change to deleted but still in db)
-router.patch("/remove/:id", securityMiddleware.checkPermission, moosagesController.removeMoosage);
+router.patch("/remove/:id", securityMiddleware.checkLogin, moosagesController.removeMoosage);
 
 // Delete a moosage.
 router.delete("/delete/:id", securityMiddleware.checkPermission, moosagesController.deleteMoosage);

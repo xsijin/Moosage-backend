@@ -27,10 +27,10 @@ router.get("/public/:userId", boardsController.getUserPublicBoards);
 router.post("/create/:userId", securityMiddleware.checkLogin, boardsController.createBoard);
 
 // Update a board
-router.patch("/update/:id", securityMiddleware.checkPermission, boardsController.updateBoard);
+router.patch("/update/:id", securityMiddleware.checkLogin, boardsController.updateBoard);
 
 // Remove a board (status change to deleted but still in db)
-router.patch("/remove/:id", securityMiddleware.checkPermission, boardsController.removeBoard);
+router.patch("/remove/:id", securityMiddleware.checkLogin, boardsController.removeBoard);
 
 // Delete a board from database (delete from db - admin only)
 router.delete("/delete/:id", securityMiddleware.checkPermission, boardsController.deleteBoard);
