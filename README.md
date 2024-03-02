@@ -158,6 +158,6 @@ Sample (able to maximize and search within the EmojiPicker):
 - [Google Images](https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.shutterstock.com%2Fimage-photo%2Fcows-herd-on-grass-field-600nw-2030724431.jpg&tbnid=TJZRiYWFzHJV6M&vet=12ahUKEwiRvr2z58WEAxV_q2MGHZrwDdsQMygFegQIARBh..i&imgrefurl=https%3A%2F%2Fwww.shutterstock.com%2Fsearch%2Fcow-landscape&docid=814uOoc0nRPGQM&w=600&h=399&q=scenic%20cows%20and%20fields%20wallpaper&ved=2ahUKEwiRvr2z58WEAxV_q2MGHZrwDdsQMygFegQIARBh) - Cow Image 2
 - [Google Images](https://www.google.com/imgres?imgurl=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1500595046743-cd271d694d30%3Fq%3D80%26w%3D1000%26auto%3Dformat%26fit%3Dcrop%26ixlib%3Drb-4.0.3%26ixid%3DM3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y293c3xlbnwwfHwwfHx8MA%253D%253D&tbnid=FpWkU78RfIlwXM&vet=12ahUKEwiRvr2z58WEAxV_q2MGHZrwDdsQMygNegQIARB0..i&imgrefurl=https%3A%2F%2Funsplash.com%2Fs%2Fphotos%2Fcows&docid=1uXj-MMqWjutDM&w=1000&h=664&q=scenic%20cows%20and%20fields%20wallpaper&ved=2ahUKEwiRvr2z58WEAxV_q2MGHZrwDdsQMygNegQIARB0) - Cow Image 3
 - [GitHub Copilot](https://github.com/features/copilot) - Answering all my programming related questions
-- [GitHub](https://github.com/) - Developer Platform
+- [GitHub](https://github.com/) - Developer Platform, version control
   <img src="/src/assets/images/copilot.png">
 - Team at Singapore General Assembly SEIF-15
